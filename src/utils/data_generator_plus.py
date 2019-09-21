@@ -14,8 +14,7 @@ import config
 
 class DataGenerator(object):
     
-    def __init__(self, feature_hdf5_path, feature_hdf5_path_left, feature_hdf5_path_right, feature_hdf5_path_side, train_csv, validate_csv,
-                 scalar, scalar_left, scalar_right, scalar_side, batch_size, seed=1234):
+    def __init__(self, feature_hdf5_path, feature_hdf5_path_left, feature_hdf5_path_right, feature_hdf5_path_side, train_csv, validate_csv, batch_size, seed=1234):
         '''Data generator for training and validation. 
         
         Args:
@@ -27,10 +26,7 @@ class DataGenerator(object):
           seed: int, random seed
         '''
 
-        self.scalar = scalar
-        self.scalar_left = scalar_left
-        self.scalar_right = scalar_right
-        self.scalar_side = scalar_side
+
         self.batch_size = batch_size
         self.random_state = np.random.RandomState(seed)
         
@@ -337,19 +333,15 @@ class DataGenerator(object):
 
 
             batch_feature = self.data_dict['feature'][batch_audio_indexes]
-            batch_feature = self.transform(batch_feature)
             batch_data_dict['feature'] = batch_feature
 
             batch_feature_left = self.data_dict_left['feature_left'][batch_audio_indexes]
-            batch_feature_left = self.transform_left(batch_feature_left)
             batch_data_dict_left['feature_left'] = batch_feature_left
 
             batch_feature_right = self.data_dict_right['feature_right'][batch_audio_indexes]
-            batch_feature_right = self.transform_right(batch_feature_right)
             batch_data_dict_right['feature_right'] = batch_feature_right
 
             batch_feature_side = self.data_dict_side['feature_side'][batch_audio_indexes]
-            batch_feature_side = self.transform_side(batch_feature_side)
             batch_data_dict_side['feature_side'] = batch_feature_side
 
 
@@ -358,12 +350,4 @@ class DataGenerator(object):
                 sparse_target, self.in_domain_classes_num)
 
             yield batch_data_dict, batch_data_dict_left, batch_data_dict_right, batch_data_dict_side
-            
-    def transform(self, x):
-        return scale(x, self.scalar['mean'], self.scalar['std'])
-    def transform_left(self, x):
-        return scale(x, self.scalar_left['mean'], self.scalar_left['std'])
-    def transform_right(self, x):
-        return scale(x, self.scalar_right['mean'], self.scalar_right['std'])
-    def transform_side(self, x):
-        return scale(x, self.scalar_side['mean'], self.scalar_side['std'])
+
