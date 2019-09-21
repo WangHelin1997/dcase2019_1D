@@ -86,18 +86,6 @@ def train(args):
     feature_hdf5_path_side = os.path.join(workspace, 'features_side',
                                           '{}logmel_{}frames_{}melbins'.format(prefix, frames_per_second, mel_bins),
                                           '{}.h5'.format(sub_dir))
-    scalar_path = os.path.join(workspace, 'scalars',
-                               '{}logmel_{}frames_{}melbins'.format(prefix, frames_per_second, mel_bins),
-                               '{}.h5'.format(sub_dir))
-    scalar_path_left = os.path.join(workspace, 'scalars_left',
-                               '{}logmel_{}frames_{}melbins'.format(prefix, frames_per_second, mel_bins),
-                               '{}.h5'.format(sub_dir))
-    scalar_path_right = os.path.join(workspace, 'scalars_right',
-                               '{}logmel_{}frames_{}melbins'.format(prefix, frames_per_second, mel_bins),
-                               '{}.h5'.format(sub_dir))
-    scalar_path_side = os.path.join(workspace, 'scalars_side',
-                                    '{}logmel_{}frames_{}melbins'.format(prefix, frames_per_second, mel_bins),
-                                    '{}.h5'.format(sub_dir))
 
     checkpoints_dir = os.path.join(workspace, 'checkpoints', filename,
                                    '{}logmel_{}frames_{}melbins'.format(prefix, frames_per_second, mel_bins),
@@ -118,11 +106,6 @@ def train(args):
     create_logging(logs_dir, 'w')
     logging.info(args)
 
-    # Load scalar
-    scalar = load_scalar(scalar_path)
-    scalar_left = load_scalar(scalar_path_left)
-    scalar_right = load_scalar(scalar_path_right)
-    scalar_side = load_scalar(scalar_path_side)
     # Model
     Model = eval(model_type)
 
@@ -150,11 +133,6 @@ def train(args):
 
         train_csv=train_csv,
         validate_csv=validate_csv,
-        scalar=scalar,
-        scalar_left=scalar_left,
-        scalar_right=scalar_right,
-        scalar_side=scalar_side,
-
         batch_size=batch_size)
 
     # Evaluator
@@ -335,19 +313,6 @@ def inference_validation(args):
                                            '{}logmel_{}frames_{}melbins'.format(prefix, frames_per_second, mel_bins),
                                            '{}.h5'.format(sub_dir))
 
-    scalar_path = os.path.join(workspace, 'scalars',
-                               '{}logmel_{}frames_{}melbins'.format(prefix, frames_per_second, mel_bins),
-                               '{}.h5'.format(sub_dir))
-    scalar_path_left = os.path.join(workspace, 'scalars_left',
-                                    '{}logmel_{}frames_{}melbins'.format(prefix, frames_per_second, mel_bins),
-                                    '{}.h5'.format(sub_dir))
-    scalar_path_right = os.path.join(workspace, 'scalars_right',
-                                     '{}logmel_{}frames_{}melbins'.format(prefix, frames_per_second, mel_bins),
-                                     '{}.h5'.format(sub_dir))
-    scalar_path_side = os.path.join(workspace, 'scalars_side',
-                                     '{}logmel_{}frames_{}melbins'.format(prefix, frames_per_second, mel_bins),
-                                     '{}.h5'.format(sub_dir))
-
 
     checkpoint_path = os.path.join(workspace, 'checkpoints', filename,
                                    '{}logmel_{}frames_{}melbins'.format(prefix, frames_per_second, mel_bins),
@@ -361,11 +326,6 @@ def inference_validation(args):
     create_logging(logs_dir, 'w')
     logging.info(args)
 
-    # Load scalar
-    scalar = load_scalar(scalar_path)
-    scalar_left = load_scalar(scalar_path_left)
-    scalar_right = load_scalar(scalar_path_right)
-    scalar_side = load_scalar(scalar_path_side)
 
 
     # Load model
@@ -393,10 +353,6 @@ def inference_validation(args):
         feature_hdf5_path_side=feature_hdf5_path_side,
         train_csv=train_csv,
         validate_csv=validate_csv,
-        scalar=scalar,
-        scalar_left=scalar_left,
-        scalar_right=scalar_right,
-        scalar_side=scalar_side,
         batch_size=batch_size)
     # Evaluator
     evaluator = Evaluator(
